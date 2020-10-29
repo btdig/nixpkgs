@@ -35,6 +35,7 @@ let
     "msp430-none"
     "riscv64-none" "riscv32-none"
     "vc4-none"
+    "cr16-none"
 
     "js-ghcjs"
 
@@ -58,6 +59,7 @@ in {
   mips          = filterDoubles predicates.isMips;
   riscv         = filterDoubles predicates.isRiscV;
   vc4           = filterDoubles predicates.isVc4;
+  cr16          = filterDoubles predicates.isCr16;
   js            = filterDoubles predicates.isJavaScript;
 
   bigEndian     = filterDoubles predicates.isBigEndian;
