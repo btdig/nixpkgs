@@ -818,6 +818,8 @@ in
 
   angle-grinder = callPackage ../tools/text/angle-grinder {};
 
+  angr = callPackage ../tools/security/angr { };
+
   ansifilter = callPackage ../tools/text/ansifilter {};
 
   antora = callPackage ../development/tools/documentation/antora {};
