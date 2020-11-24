@@ -1,18 +1,16 @@
-{ stdenv, fetchurl, makeWrapper, darwin, bootstrap-chicken ? null }:
+{ targetPlatform, hostPlatform, stdenv, lib, fetchurl, makeWrapper, darwin, bootstrap-chicken ? null }:
 
 let
-  version = "5.2.0";
   platform = with stdenv;
     if isDarwin then "macosx"
     else if isCygwin then "cygwin"
     else if (isFreeBSD || isOpenBSD) then "bsd"
     else if isSunOS then "solaris"
     else "linux"; # Should be a sane default
-  lib = stdenv.lib;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "chicken";
-  inherit version;
+  version = "5.2.0";
 
   binaryVersion = 11;
 
@@ -27,7 +25,11 @@ stdenv.mkDerivation {
   hardeningDisable = lib.optionals stdenv.isDarwin ["strictoverflow"];
 
   makeFlags = [
-    "PLATFORM=${platform}" "PREFIX=$(out)"
+    "PLATFORM=${platform}"
+    "PREFIX=$(out)"
+    "HOSTSYSTEM=${hostPlatform.config}"
+    "TARGETSYSTEM=${targetPlatform.config}"
+    "LIBRARIAN=$(HOSTSYSTEM)-gcc-ar"
   ] ++ (lib.optionals stdenv.isDarwin [
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "C_COMPILER=$(CC)"
@@ -49,11 +51,11 @@ stdenv.mkDerivation {
 
   # TODO: Assert csi -R files -p '(pathname-file (repository-path))' == binaryVersion
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.call-cc.org/";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ corngood ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin; # Maybe other Unix
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ corngood ];
+    platforms = platforms.unix;
     description = "A portable compiler for the Scheme programming language";
     longDescription = ''
       CHICKEN is a compiler for the Scheme programming language.
