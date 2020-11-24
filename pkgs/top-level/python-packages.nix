@@ -872,6 +872,8 @@ in {
 
   bitbucket-cli = callPackage ../development/python-modules/bitbucket-cli { };
 
+  bitcash = callPackage ../development/python-modules/bitcash { };
+
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
 
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
@@ -1264,6 +1266,8 @@ in {
   cogapp = callPackage ../development/python-modules/cogapp { };
 
   coilmq = callPackage ../development/python-modules/coilmq { };
+
+  coincurve = callPackage ../development/python-modules/coincurve { };
 
   coinmarketcap = callPackage ../development/python-modules/coinmarketcap { };
 
