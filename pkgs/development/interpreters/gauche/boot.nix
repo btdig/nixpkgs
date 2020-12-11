@@ -1,24 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, gaucheBootstrap, pkg-config, texinfo
-,  libiconv, gdbm, openssl, zlib, mbedtls, cacert }:
+{ stdenv, fetchurl, pkgconfig, texinfo, libiconv, gdbm, openssl, zlib
+, mbedtls, cacert
+}:
 
 stdenv.mkDerivation rec {
-  pname = "gauche";
-  version = "0.9.10";
+  pname = "gauche-bootstrap";
+  version = "0.9.9";
 
-  src = fetchFromGitHub {
-    owner = "shirok";
-    repo = pname;
-    rev = "release${lib.replaceChars [ "." ] [ "_" ] version}";
-    sha256 = "1lnfhywj3p3708qxsjqr6qp0dw68fx5lvj1djbsrd213w59p1v51";
+  src = fetchurl {
+    url = "mirror://sourceforge/gauche/Gauche-${version}.tgz";
+    sha256 = "1yzpszhw52vkpr65r5d4khf3489mnnvnw58dd2wsvvx7499k5aac";
   };
 
-  nativeBuildInputs = [ gaucheBootstrap pkg-config texinfo autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig texinfo ];
 
   buildInputs = [ libiconv gdbm openssl zlib mbedtls cacert ];
-
-  autoreconfPhase = ''
-    ./DIST gen
-  '';
 
   postPatch = ''
     patchShebangs .
@@ -39,7 +34,7 @@ stdenv.mkDerivation rec {
   # TODO: Fix tests that fail in sandbox build
   doCheck = false;
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "R7RS Scheme scripting engine";
     homepage = "https://practical-scheme.net/gauche/";
     maintainers = with maintainers; [ mnacamura ];
