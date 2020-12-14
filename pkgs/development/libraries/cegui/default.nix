@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, cmake, ogre, freetype, boost, expat, libiconv }:
+{ stdenv, fetchurl, cmake, ogre, freetype, boost, expat, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "cegui";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
 
   buildInputs = [ cmake ogre freetype boost expat ]
-                ++ lib.optionals stdenv.isDarwin [ libiconv ];
+                ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
   meta = with stdenv.lib; {
     homepage = "http://cegui.org.uk/";
